@@ -34,6 +34,7 @@ const projectSchema = mongoose.Schema({
       ref: "Error",
     },
   ],
+  performance: [Object],
 });
 
 module.exports = mongoose.model("Project", projectSchema);

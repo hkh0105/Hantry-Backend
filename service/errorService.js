@@ -22,6 +22,20 @@ async function saveNewError(error, dsn) {
   return newError;
 }
 
+async function saveNewPerformance(type, performance, dsn) {
+  const project = await Project.findOne({ dsn: dsn });
+
+  if (!project) {
+    return null;
+  }
+
+  project.performance.push({ type: performance });
+  await project.save();
+
+  return "1";
+}
+
 module.exports = {
   saveNewError,
+  saveNewPerformance,
 };
