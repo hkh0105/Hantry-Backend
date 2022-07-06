@@ -5,9 +5,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  name: {
+    type: String,
+  },
   uid: {
     type: String,
-    default: null,
   },
   token: {
     type: [String],
