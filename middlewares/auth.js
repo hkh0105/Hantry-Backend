@@ -1,70 +1,46 @@
 const jwt = require("jsonwebtoken");
 const asyncCatcher = require("../utils/asyncCatcher");
 const CustomeError = require("../utils/CustomError");
-
-const { ACCESS_TOKEN_URL } = require("../constants/urlConstants");
-
 const {
   TOKEN_DOES_NOT_EXIST,
   INVALID_TOKEN,
   NOT_LOGGED_IN,
 } = require("../constants/errorConstants");
-const { default: axios } = require("axios");
 
 const verifyToken = asyncCatcher(async (req, res, next) => {
-  const { code } = req.body;
-  console.log(req.body);
-  const accessToken = (
-    await axios.post(`${ACCESS_TOKEN_URL}&code=${code}`)
-  ).data
-    .split("=")[1]
-    .split("&")[0];
+  const authToken = req.headers.authorization;
 
-  if (!accessToken) {
-    return next(new CustomeError(INVALID_TOKEN));
+  if (!authToken) {
+    return next(CustomeError(TOKEN_DOES_NOT_EXIST));
   }
 
-  const userData = (
-    await axios.get("https://api.github.com/user", {
-      headers: {
-        Authorization: `token ${accessToken}`,
-      },
-    })
-  ).data;
-
-  const userInfo = {
-    name: userData.login,
-    email: userData.email ? userData.email : `${userData.login}@gmail.com`,
-    profileImage: userData.avatar_url,
-  };
-
-  req.userData = userInfo;
-
-  next();
-});
-
-const isLoggedIn = asyncCatcher(async (req, res, next) => {
-  if (!req.cookies["server_token"]) {
-    return next(new Error(TOKEN_DOES_NOT_EXIST));
+  if (authToken.split(" ")[0] !== "Bearer") {
+    return next(CustomeError(TOKEN_DOES_NOT_EXIST));
   }
 
-  const userIdToken = req.cookies["server_token"];
-  const userId = jwt.verify(userIdToken, process.env.TOKEN_SECRET);
-  req.userId = userId;
+  const accessToken = authToken.split(" ")[1];
 
-  next();
-});
+  const verifiedUserData = jwt.verify(
+    accessToken,
+    process.env.JWT_SECRET_KEY,
+    (error, payload) => {
+      if (error) {
+        return null;
+      }
 
-const isLoggedOut = asyncCatcher(async (req, res, next) => {
-  if (req.cookies["server_token"]) {
-    return next(new Error(NOT_LOGGED_IN));
+      return payload;
+    },
+  );
+
+  if (!verifiedUserData) {
+    return next(CustomeError(TOKEN_DOES_NOT_EXIST));
   }
+
+  req.user = verifiedUserData;
 
   next();
 });
 
 module.exports = {
   verifyToken,
-  isLoggedIn,
-  isLoggedOut,
 };

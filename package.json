@@ -11,6 +11,8 @@
     "debug": "~2.6.9",
     "dotenv": "^16.0.1",
     "express": "~4.16.1",
+    "google-auth-library": "^8.1.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.4.2",
     "morgan": "~1.9.1",
     "nodemon": "^2.0.18"
