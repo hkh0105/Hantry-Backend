@@ -1,6 +1,11 @@
 const asyncCatcher = require("../utils/asyncCatcher");
 const CustomeError = require("../utils/CustomError");
-const { saveNewError, saveNewPerformance } = require("../service/errorService");
+const { saveNewProject } = require("../service/projectService");
+const {
+  saveNewError,
+  saveNewPerformance,
+  saveNewProject,
+} = require("../service/errorService");
 const {
   USER_DOES_NOT_EXIST,
   FOUND_NO_FIELD,
@@ -11,7 +16,6 @@ const {
 const updateProjectError = asyncCatcher(async (req, res, next) => {
   const { dsn } = req.params.dsn;
   const { error } = req.body;
-  console.log(req.body);
   const newError = await saveNewError(error, dsn);
 
   if (!newError) {
@@ -26,7 +30,7 @@ const updateProjectError = asyncCatcher(async (req, res, next) => {
 const updateProjectPerformance = asyncCatcher(async (req, res, next) => {
   const { dsn } = req.params.dsn;
   const { entryType, parsedEntry } = req.body;
-  const newPerformance = await saveNewError(entryType, parsedEntry, dsn);
+  const newPerformance = await saveNewPerformance(entryType, parsedEntry, dsn);
 
   if (!newPerformance) {
     return next(new CustomeError(FOUND_NO_FIELD));
@@ -38,7 +42,23 @@ const updateProjectPerformance = asyncCatcher(async (req, res, next) => {
   });
 });
 
+const createProject = asyncCatcher(async (req, res, next) => {
+  const { project } = req.body;
+  const newProject = await saveNewProject(project);
+
+  if (!newProject) {
+    return next(new CustomeError(FOUND_NO_DATA));
+  }
+
+  return res.json({
+    ok: true,
+    status: 201,
+    newProject,
+  });
+});
+
 module.exports = {
+  createProject,
   updateProjectError,
   updateProjectPerformance,
 };
