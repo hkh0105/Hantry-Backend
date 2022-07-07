@@ -67,7 +67,6 @@ async function getUserProjectAll(_id) {
   return userProjectList;
 }
 
-updateUserProject(fieldName, newFieldData, dsn);
 module.exports = {
   getUserProjectAll,
   saveNewProject,
