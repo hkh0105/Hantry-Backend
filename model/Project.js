@@ -5,6 +5,9 @@ const projectSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+  },
   platform: {
     type: String,
     required: true,

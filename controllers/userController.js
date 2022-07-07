@@ -4,6 +4,7 @@ const {
   saveNewProject,
   deleteUserProject,
   saveProjectSourceMap,
+  getUserProjectAll,
 } = require("../service/projectService");
 const { saveNewError, saveNewPerformance } = require("../service/errorService");
 const {
@@ -101,9 +102,25 @@ const updateProjectSourceMap = asyncCatcher(async (req, res, next) => {
   });
 });
 
+const getUserProject = asyncCatcher(async (req, res, next) => {
+  const { _id } = req.user;
+  const userProject = await getUserProjectAll(_id);
+
+  if (!userProject) {
+    return next(new CustomeError(FOUND_NO_FIELD));
+  }
+
+  return res.json({
+    ok: true,
+    userProject,
+  });
+});
+
 module.exports = {
+  getUserProject,
   deleteProject,
   createProject,
+  updateProject,
   updateProjectError,
   updateProjectPerformance,
   updateProjectSourceMap,

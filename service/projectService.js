@@ -57,8 +57,19 @@ async function updateUserProject(fieldName, newFieldData, dsn) {
   return updatedProject;
 }
 
+async function getUserProjectAll(_id) {
+  const userProjectList = await Project.find({ owner: _id });
+
+  if (!userProjectList) {
+    return null;
+  }
+
+  return userProjectList;
+}
+
 updateUserProject(fieldName, newFieldData, dsn);
 module.exports = {
+  getUserProjectAll,
   saveNewProject,
   deleteUserProject,
   saveProjectSourceMap,
