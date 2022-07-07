@@ -2,7 +2,7 @@ const asyncCatcher = require("../utils/asyncCatcher");
 const CustomeError = require("../utils/CustomError");
 const {
   saveNewProject,
-  deleteNewProject,
+  deleteUserProject,
   saveProjectSourceMap,
 } = require("../service/projectService");
 const { saveNewError, saveNewPerformance } = require("../service/errorService");
@@ -59,9 +59,9 @@ const createProject = asyncCatcher(async (req, res, next) => {
 
 const deleteProject = asyncCatcher(async (req, res, next) => {
   const { dsn } = req.params.dsn;
-  const deletedProject = await deleteNewProject(dsn);
+  const deletedProject = await deleteUserProject(dsn);
 
-  if (!newProject) {
+  if (!deletedProject) {
     return next(new CustomeError(FOUND_NO_DATA));
   }
 
@@ -73,15 +73,17 @@ const deleteProject = asyncCatcher(async (req, res, next) => {
 
 const updateProject = asyncCatcher(async (req, res, next) => {
   const { dsn } = req.params.dsn;
-  const deletedProject = await deleteNewProject(dsn);
+  const { fieldName, newFieldData } = req.body;
+  const updatedProject = await updateUserProject(fieldName, newFieldData, dsn);
 
-  if (!newProject) {
+  if (!updatedProject) {
     return next(new CustomeError(FOUND_NO_DATA));
   }
 
   return res.json({
     ok: true,
     status: 201,
+    updatedProject,
   });
 });
 
