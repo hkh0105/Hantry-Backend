@@ -1,11 +1,12 @@
 const asyncCatcher = require("../utils/asyncCatcher");
 const CustomeError = require("../utils/CustomError");
-const { saveNewProject } = require("../service/projectService");
 const {
-  saveNewError,
-  saveNewPerformance,
   saveNewProject,
-} = require("../service/errorService");
+  deleteUserProject,
+  saveProjectSourceMap,
+  getUserProjectAll,
+} = require("../service/projectService");
+const { saveNewError, saveNewPerformance } = require("../service/errorService");
 const {
   USER_DOES_NOT_EXIST,
   FOUND_NO_FIELD,
@@ -57,8 +58,70 @@ const createProject = asyncCatcher(async (req, res, next) => {
   });
 });
 
+const deleteProject = asyncCatcher(async (req, res, next) => {
+  const { dsn } = req.params.dsn;
+  const deletedProject = await deleteUserProject(dsn);
+
+  if (!deletedProject) {
+    return next(new CustomeError(FOUND_NO_DATA));
+  }
+
+  return res.json({
+    ok: true,
+    status: 201,
+  });
+});
+
+const updateProject = asyncCatcher(async (req, res, next) => {
+  const { dsn } = req.params.dsn;
+  const { fieldName, newFieldData } = req.body;
+  const updatedProject = await updateUserProject(fieldName, newFieldData, dsn);
+
+  if (!updatedProject) {
+    return next(new CustomeError(FOUND_NO_DATA));
+  }
+
+  return res.json({
+    ok: true,
+    status: 201,
+    updatedProject,
+  });
+});
+
+const updateProjectSourceMap = asyncCatcher(async (req, res, next) => {
+  const { dsn } = req.params.dsn;
+  const { sourceMap, bundledSource } = req.body;
+  const newError = await saveProjectSourceMap(sourceMap, bundledSource, dsn);
+
+  if (!newError) {
+    return next(new CustomeError(FOUND_NO_FIELD));
+  }
+
+  return res.json({
+    ok: true,
+  });
+});
+
+const getUserProject = asyncCatcher(async (req, res, next) => {
+  const { _id } = req.user;
+  const userProject = await getUserProjectAll(_id);
+
+  if (!userProject) {
+    return next(new CustomeError(FOUND_NO_FIELD));
+  }
+
+  return res.json({
+    ok: true,
+    userProject,
+  });
+});
+
 module.exports = {
+  getUserProject,
+  deleteProject,
   createProject,
+  updateProject,
   updateProjectError,
   updateProjectPerformance,
+  updateProjectSourceMap,
 };

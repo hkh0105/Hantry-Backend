@@ -19,4 +19,59 @@ async function saveNewProject(project) {
   return newProject;
 }
 
-module.exports = { saveNewProject };
+async function deleteUserProject(dsn) {
+  const newProject = await Project.findOneAndRemove({ dsn: dsn });
+
+  if (!newProject) {
+    return null;
+  }
+
+  return newProject;
+}
+
+async function saveProjectSourceMap(sourceMap, bundledSource, dsn) {
+  const newProject = await Project.findOne({ dsn: dsn });
+  newProject.sourceMap = sourceMap;
+  newProject.bundledSource = bundledSource;
+  await newProject.save();
+
+  if (!newProject) {
+    return null;
+  }
+
+  return newProject;
+}
+
+async function updateUserProject(fieldName, newFieldData, dsn) {
+  const updatedProject = await Project.findOneAndUpdate(
+    { dsn: dsn },
+    {
+      [fieldName]: newFieldData,
+    },
+  );
+
+  if (!updatedProject) {
+    return null;
+  }
+
+  return updatedProject;
+}
+
+async function getUserProjectAll(_id) {
+  const userProjectList = await Project.find({ owner: _id });
+
+  if (!userProjectList) {
+    return null;
+  }
+
+  return userProjectList;
+}
+
+updateUserProject(fieldName, newFieldData, dsn);
+module.exports = {
+  getUserProjectAll,
+  saveNewProject,
+  deleteUserProject,
+  saveProjectSourceMap,
+  updateUserProject,
+};
