@@ -19,4 +19,27 @@ async function saveNewProject(project) {
   return newProject;
 }
 
-module.exports = { saveNewProject };
+async function deleteNewProject(dsn) {
+  const newProject = await Project.findOneAndRemove({ dsn: dsn });
+
+  if (!newProject) {
+    return null;
+  }
+
+  return newProject;
+}
+
+async function saveProjectSourceMap(sourceMap, bundledSource, dsn) {
+  const newProject = await Project.findOne({ dsn: dsn });
+  newProject.sourceMap = sourceMap;
+  newProject.bundledSource = bundledSource;
+  await newProject.save();
+
+  if (!newProject) {
+    return null;
+  }
+
+  return newProject;
+}
+
+module.exports = { saveNewProject, deleteNewProject, saveProjectSourceMap };

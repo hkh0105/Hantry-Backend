@@ -1,11 +1,11 @@
 const asyncCatcher = require("../utils/asyncCatcher");
 const CustomeError = require("../utils/CustomError");
-const { saveNewProject } = require("../service/projectService");
 const {
-  saveNewError,
-  saveNewPerformance,
   saveNewProject,
-} = require("../service/errorService");
+  deleteNewProject,
+  saveProjectSourceMap,
+} = require("../service/projectService");
+const { saveNewError, saveNewPerformance } = require("../service/errorService");
 const {
   USER_DOES_NOT_EXIST,
   FOUND_NO_FIELD,
@@ -57,8 +57,52 @@ const createProject = asyncCatcher(async (req, res, next) => {
   });
 });
 
+const deleteProject = asyncCatcher(async (req, res, next) => {
+  const { dsn } = req.params.dsn;
+  const deletedProject = await deleteNewProject(dsn);
+
+  if (!newProject) {
+    return next(new CustomeError(FOUND_NO_DATA));
+  }
+
+  return res.json({
+    ok: true,
+    status: 201,
+  });
+});
+
+const updateProject = asyncCatcher(async (req, res, next) => {
+  const { dsn } = req.params.dsn;
+  const deletedProject = await deleteNewProject(dsn);
+
+  if (!newProject) {
+    return next(new CustomeError(FOUND_NO_DATA));
+  }
+
+  return res.json({
+    ok: true,
+    status: 201,
+  });
+});
+
+const updateProjectSourceMap = asyncCatcher(async (req, res, next) => {
+  const { dsn } = req.params.dsn;
+  const { sourceMap, bundledSource } = req.body;
+  const newError = await saveProjectSourceMap(sourceMap, bundledSource, dsn);
+
+  if (!newError) {
+    return next(new CustomeError(FOUND_NO_FIELD));
+  }
+
+  return res.json({
+    ok: true,
+  });
+});
+
 module.exports = {
+  deleteProject,
   createProject,
   updateProjectError,
   updateProjectPerformance,
+  updateProjectSourceMap,
 };

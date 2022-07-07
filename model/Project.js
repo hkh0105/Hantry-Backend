@@ -17,7 +17,10 @@ const projectSchema = mongoose.Schema({
     type: Boolean,
   },
   sourceMap: {
-    type: Boolean,
+    type: Object,
+  },
+  bundledSource: {
+    type: Object,
   },
   alaramSettings: {
     type: Boolean,

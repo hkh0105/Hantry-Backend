@@ -13,19 +13,26 @@ const errorSchema = new mongoose.Schema({
   device: {
     type: String,
   },
-  url: {
-    type: String,
-  },
   browser: {
     type: String,
   },
-  app: {
+  engine: {
+    type: String,
+  },
+  ua: {
+    type: String,
+  },
+  cpu: {
+    type: String,
+  },
+  source: {
     type: String,
   },
   location: {
-    file: String,
-    line: String,
+    lineno: String,
+    colno: String,
   },
+  stack: [Object],
   breadcrumbs: [String],
 
   project: {
