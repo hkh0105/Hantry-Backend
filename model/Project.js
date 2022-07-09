@@ -16,9 +16,6 @@ const projectSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  breadcrumbs: {
-    type: Boolean,
-  },
   sourceMap: {
     type: Object,
   },
