@@ -36,8 +36,7 @@ const errorSchema = new mongoose.Schema({
   breadcrumbs: [String],
 
   project: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Project",
+    type: String,
   },
 });
 

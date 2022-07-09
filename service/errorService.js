@@ -35,7 +35,30 @@ async function saveNewPerformance(type, performance, dsn) {
   return "1";
 }
 
+async function getErrorDetatils(errorId) {
+  const error = await Error.findById(errorId);
+
+  if (!error) {
+    return null;
+  }
+
+  return error;
+}
+async function getFileteredErrorList(dsn, filter_ype, page) {
+  const project = await Error.find({ project: dsn, type: filter_type })
+    .skip(5 * page - 5)
+    .limit(5);
+
+  if (!project) {
+    return null;
+  }
+
+  return project;
+}
+
 module.exports = {
+  getFileteredErrorList,
+  getErrorDetatils,
   saveNewError,
   saveNewPerformance,
 };
