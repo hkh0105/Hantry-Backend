@@ -10,7 +10,7 @@ const {
   NOT_LOGGED_IN,
 } = require("../constants/errorConstants");
 
-function errorHandler(err, req, res, next) {
+const errorHandler = (err, req, res, next) => {
   let error = { ...err, name: err.name, message: err.message };
 
   console.log(err.stack);
@@ -79,6 +79,6 @@ function errorHandler(err, req, res, next) {
     status: 500,
     message: "서버에 문제가 발생했습니다.",
   });
-}
+};
 
 module.exports = errorHandler;

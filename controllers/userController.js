@@ -2,11 +2,14 @@ const asyncCatcher = require("../utils/asyncCatcher");
 const CustomeError = require("../utils/CustomError");
 const getSource = require("../utils/getSourceFromSourceMap");
 const fs = require("fs");
+
 const {
   saveNewProject,
   deleteUserProject,
   saveProjectSourceMap,
   getUserProjectAll,
+  getDetails,
+  getAllErrors,
 } = require("../service/projectService");
 const {
   saveNewError,
@@ -22,9 +25,10 @@ const {
 } = require("../constants/errorConstants");
 
 const updateProjectError = asyncCatcher(async (req, res, next) => {
-  const { dsn } = req.params.dsn;
+  const { dsn } = req.params;
   const { error } = req.body;
-  const newError = await saveNewError(error, dsn);
+
+  const newError = await saveNewError(req.body, dsn);
 
   if (!newError) {
     return next(new CustomeError(FOUND_NO_FIELD));
@@ -52,6 +56,8 @@ const updateProjectPerformance = asyncCatcher(async (req, res, next) => {
 
 const createProject = asyncCatcher(async (req, res, next) => {
   const { project } = req.body;
+  console.log(req.body);
+  console.log(project);
   const newProject = await saveNewProject(project);
 
   if (!newProject) {
@@ -66,7 +72,7 @@ const createProject = asyncCatcher(async (req, res, next) => {
 });
 
 const deleteProject = asyncCatcher(async (req, res, next) => {
-  const { dsn } = req.params.dsn;
+  const { dsn } = req.params;
   const deletedProject = await deleteUserProject(dsn);
 
   if (!deletedProject) {
@@ -113,6 +119,7 @@ const updateProjectSourceMap = asyncCatcher(async (req, res, next) => {
 
 const getUserProject = asyncCatcher(async (req, res, next) => {
   const { _id } = req.user;
+  console.log(req.body);
   const userProject = await getUserProjectAll(_id);
 
   if (!userProject) {
@@ -139,23 +146,52 @@ const getError = asyncCatcher(async (req, res, next) => {
   });
 });
 
-const getErrorList = asyncCatcher(async (req, res, next) => {
-  const { filter_ype, page } = req.query;
-  const { dsn } = req.params;
-  const projectList = await getFileteredErrorList(dsn, filter_ype, page);
+const getProjectErrorList = asyncCatcher(async (req, res, next) => {
+  const { dsn, page_number } = req.params;
+  const errorList = await getFileteredErrorList(dsn, page_number);
 
-  if (!projectList) {
+  if (!errorList) {
     return next(new CustomeError(FOUND_NO_FIELD));
   }
 
   return res.json({
     ok: true,
-    projectList,
+    errorList,
+  });
+});
+
+const getProjectDetails = asyncCatcher(async (req, res, next) => {
+  const { dsn } = req.params;
+  const projectDetails = await getDetails(dsn);
+
+  if (!projectDetails) {
+    return next(new CustomeError(FOUND_NO_FIELD));
+  }
+
+  return res.json({
+    ok: true,
+    projectDetails,
+  });
+});
+
+const getProjectAllError = asyncCatcher(async (req, res, next) => {
+  const { dsn } = req.params;
+  const allErrors = await getAllErrors(dsn);
+
+  if (!allErrors) {
+    return next(new CustomeError(FOUND_NO_FIELD));
+  }
+
+  return res.json({
+    ok: true,
+    allErrors,
   });
 });
 
 module.exports = {
-  getErrorList,
+  getProjectAllError,
+  getProjectDetails,
+  getProjectErrorList,
   getError,
   getUserProject,
   deleteProject,

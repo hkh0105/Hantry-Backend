@@ -22,9 +22,15 @@ const projectSchema = mongoose.Schema({
   bundledSource: {
     type: Object,
   },
-  alaramSettings: {
+  alarm: {
     type: Boolean,
-    number: {
+  },
+  alaramSettings: {
+    alarmType: {
+      type: String,
+      enum: ["Email", "Slack"],
+    },
+    alarmNumber: {
       type: Number,
     },
     email: {
@@ -34,7 +40,6 @@ const projectSchema = mongoose.Schema({
   error: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Error",
     },
   ],
   performance: [Object],

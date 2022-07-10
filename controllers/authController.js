@@ -12,7 +12,6 @@ const {
 
 const login = asyncCatcher(async (req, res, next) => {
   const { name, email } = req.user;
-
   if (!name || !email) {
     return next(new CustomeError(FOUND_NO_DATA));
   }
@@ -23,7 +22,7 @@ const login = asyncCatcher(async (req, res, next) => {
   return res.json({
     ok: true,
     user,
-    accessToken,
+    accessToken: accessToken,
   });
 });
 

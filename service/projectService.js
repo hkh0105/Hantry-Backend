@@ -67,7 +67,29 @@ async function getUserProjectAll(_id) {
   return userProjectList;
 }
 
+async function getDetails(dsn) {
+  const project = await Project.findOne({ dsn: dsn });
+
+  if (!project) {
+    return null;
+  }
+
+  return project;
+}
+
+async function getAllErrors(dsn) {
+  const allErrors = await Error.find({ dsn: dsn });
+
+  if (!allErrors) {
+    return null;
+  }
+
+  return allErrors;
+}
+
 module.exports = {
+  getAllErrors,
+  getDetails,
   getUserProjectAll,
   saveNewProject,
   deleteUserProject,

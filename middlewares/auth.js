@@ -11,11 +11,11 @@ const verifyToken = asyncCatcher(async (req, res, next) => {
   const authToken = req.headers.authorization;
 
   if (!authToken) {
-    return next(CustomeError(TOKEN_DOES_NOT_EXIST));
+    return next(new CustomeError(TOKEN_DOES_NOT_EXIST));
   }
 
   if (authToken.split(" ")[0] !== "Bearer") {
-    return next(CustomeError(TOKEN_DOES_NOT_EXIST));
+    return next(new CustomeError(TOKEN_DOES_NOT_EXIST));
   }
 
   const accessToken = authToken.split(" ")[1];
@@ -33,11 +33,10 @@ const verifyToken = asyncCatcher(async (req, res, next) => {
   );
 
   if (!verifiedUserData) {
-    return next(CustomeError(TOKEN_DOES_NOT_EXIST));
+    return next(new CustomeError(TOKEN_DOES_NOT_EXIST));
   }
 
   req.user = verifiedUserData;
-
   next();
 });
 

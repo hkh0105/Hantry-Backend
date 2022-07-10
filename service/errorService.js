@@ -15,9 +15,22 @@ async function saveNewError(error, dsn) {
     return null;
   }
 
-  error.project = project._id;
-  const newError = new Error(error);
+  const newError = new Error({
+    type: error.type,
+    message: error.message,
+    source: error.source,
+    location: error.location,
+    stack: error.stack,
+    user: error.user,
+    breadcrumbsURL: error.breadcrumbsURL,
+    breadcrumbsClick: error.breadcrumbsClick,
+    createdAt: error.createdAt,
+    project: dsn,
+  });
+
+  console.log(newError);
   await newError.save();
+  console.log(newError);
 
   return newError;
 }
@@ -44,8 +57,8 @@ async function getErrorDetatils(errorId) {
 
   return error;
 }
-async function getFileteredErrorList(dsn, filter_ype, page) {
-  const project = await Error.find({ project: dsn, type: filter_type })
+async function getFileteredErrorList(dsn, page) {
+  const project = await Error.find({ project: dsn })
     .skip(5 * page - 5)
     .limit(5);
 

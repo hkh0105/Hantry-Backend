@@ -7,24 +7,21 @@ const errorSchema = new mongoose.Schema({
   message: {
     type: String,
   },
-  os: {
-    type: String,
+  user: {
+    os: {
+      type: String,
+    },
+    browser: {
+      type: String,
+    },
+    engine: {
+      type: String,
+    },
+    ua: {
+      type: String,
+    },
   },
-  device: {
-    type: String,
-  },
-  browser: {
-    type: String,
-  },
-  engine: {
-    type: String,
-  },
-  ua: {
-    type: String,
-  },
-  cpu: {
-    type: String,
-  },
+
   source: {
     type: String,
   },
@@ -32,12 +29,12 @@ const errorSchema = new mongoose.Schema({
     lineno: String,
     colno: String,
   },
-  stack: [Object],
-  breadcrumbs: [String],
 
-  project: {
-    type: String,
-  },
+  stack: [Object],
+  breadcrumbsURL: [String],
+  breadcrumbsClick: [String],
+  createdAt: Date,
+  project: String,
 });
 
 module.exports = mongoose.model("Error", errorSchema);

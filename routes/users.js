@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { verifyToken } = require("../middlewares/auth");
 const {
+  getError,
   createProject,
   updateProjectError,
   updateProjectPerformance,
@@ -9,10 +10,12 @@ const {
   deleteProject,
   updateProject,
   getUserProject,
-  getError,
-  getErrorList,
+  getProjectErrorList,
+  getProjectDetails,
+  getProjectAllError,
 } = require("../controllers/userController");
 
+router.route("/project/:dsn/error").get(verifyToken, getProjectAllError);
 router.route("/project/:dsn/error").post(updateProjectError);
 router.route("/project/:dsn/performance").post(updateProjectPerformance);
 router.route("/project/:dsn/sourceMap").post(updateProjectSourceMap);
@@ -20,7 +23,10 @@ router.route("/project").post(verifyToken, createProject);
 router.route("/project").get(verifyToken, getUserProject);
 router.route("/project/:dsn").delete(verifyToken, deleteProject);
 router.route("/project/:dsn").patch(verifyToken, updateProject);
+router.route("/project/:dsn").get(verifyToken, getProjectDetails);
 router.route("/project/:dsn/error/:error_id").get(verifyToken, getError);
-router.route("project/:dsn/error").get(verifyToken, getErrorList);
+router
+  .route("/project/:dsn/error/page/:page_number")
+  .get(verifyToken, getProjectErrorList);
 
 module.exports = router;
