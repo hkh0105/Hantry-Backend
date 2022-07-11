@@ -22,10 +22,9 @@ async function saveNewError(error, dsn) {
       project.sourceMap,
       dsn,
     );
+
     const newError = new Error(generatedError);
-
     await newError.save();
-
     return newError;
   }
 
