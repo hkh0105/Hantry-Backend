@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { verifyToken } = require("../middlewares/auth");
 const {
-  getError,
   createProject,
   updateProjectError,
   updateProjectPerformance,
@@ -24,7 +23,6 @@ router.route("/project").get(verifyToken, getUserProject);
 router.route("/project/:dsn").delete(verifyToken, deleteProject);
 router.route("/project/:dsn").patch(verifyToken, updateProject);
 router.route("/project/:dsn").get(verifyToken, getProjectDetails);
-router.route("/project/:dsn/error/:error_id").get(verifyToken, getError);
 router
   .route("/project/:dsn/error/page/:page_number")
   .get(verifyToken, getProjectErrorList);

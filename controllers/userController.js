@@ -133,7 +133,7 @@ const getUserProject = asyncCatcher(async (req, res, next) => {
 });
 
 const getError = asyncCatcher(async (req, res, next) => {
-  const { dsn, error_id } = req.params;
+  const { error_id } = req.params;
   const error = await getErrorDetatils(error_id);
 
   if (!error) {
