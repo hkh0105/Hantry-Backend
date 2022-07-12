@@ -53,7 +53,10 @@ async function saveNewPerformance(type, performance, dsn) {
     return null;
   }
 
-  project.performance.push({ type: performance });
+  const newPerformance = {};
+  newPerformance[type] = performance;
+
+  project.performance.push(newPerformance);
   await project.save();
 
   return "1";

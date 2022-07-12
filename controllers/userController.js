@@ -40,8 +40,9 @@ const updateProjectError = asyncCatcher(async (req, res, next) => {
 });
 
 const updateProjectPerformance = asyncCatcher(async (req, res, next) => {
-  const { dsn } = req.params.dsn;
+  const { dsn } = req.params;
   const { entryType, parsedEntry } = req.body;
+  console.log(req.body);
   const newPerformance = await saveNewPerformance(entryType, parsedEntry, dsn);
 
   if (!newPerformance) {
