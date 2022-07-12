@@ -1,6 +1,7 @@
 const CustomeError = require("../utils/CustomError");
 const Error = require("../model/Error");
 const Project = require("../model/Project");
+const { getSourceFromSourceMap } = require("../utils/getSourceFromSourceMap");
 const {
   USER_DOES_NOT_EXIST,
   FOUND_NO_FIELD,
@@ -15,22 +16,32 @@ async function saveNewError(error, dsn) {
     return null;
   }
 
+  if (project.sourceMap) {
+    const generatedError = getSourceFromSourceMap(
+      error,
+      project.sourceMap,
+      dsn,
+    );
+
+    const newError = new Error(generatedError);
+    await newError.save();
+    return newError;
+  }
+
   const newError = new Error({
-    type: error.type,
-    message: error.message,
-    source: error.source,
-    location: error.location,
-    stack: error.stack,
-    user: error.user,
-    breadcrumbsURL: error.breadcrumbsURL,
-    breadcrumbsClick: error.breadcrumbsClick,
-    createdAt: error.createdAt,
+    type: error.type || "React",
+    message: error.message || "",
+    source: error.source || "",
+    location: error.location || { colno: 0, lineno: 0 },
+    stack: error.stack || [],
+    user: error.user || {},
+    breadcrumbsURL: error.breadcrumbsURL || [],
+    breadcrumbsClick: error.breadcrumbsClick || [],
+    createdAt: error.createdAt || Date.now(),
     project: dsn,
   });
 
-  console.log(newError);
   await newError.save();
-  console.log(newError);
 
   return newError;
 }

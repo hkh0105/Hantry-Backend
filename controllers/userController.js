@@ -26,9 +26,9 @@ const {
 
 const updateProjectError = asyncCatcher(async (req, res, next) => {
   const { dsn } = req.params;
-  const { error } = req.body;
+  const error = req.body;
 
-  const newError = await saveNewError(req.body, dsn);
+  const newError = await saveNewError(error, dsn);
 
   if (!newError) {
     return next(new CustomeError(FOUND_NO_FIELD));
@@ -119,7 +119,6 @@ const updateProjectSourceMap = asyncCatcher(async (req, res, next) => {
 
 const getUserProject = asyncCatcher(async (req, res, next) => {
   const { _id } = req.user;
-  console.log(req.body);
   const userProject = await getUserProjectAll(_id);
 
   if (!userProject) {
