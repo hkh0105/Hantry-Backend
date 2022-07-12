@@ -61,4 +61,12 @@ async function getSource(map, line, column) {
   return location;
 }
 
+function playground(map, line, column) {
+  if (line < 0 && column < 0) return { line: 0, column: 0, source: null };
+  const location = {
+    line,
+    column,
+  };
+}
+
 module.exports = { getSourceFromSourceMap };
