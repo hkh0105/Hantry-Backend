@@ -1,6 +1,6 @@
 const { WebClient } = require("@slack/web-api");
 
-const send = async (error, channelId) => {
+const sendMessageToSlack = async (channelId, error) => {
   const id = channelId;
   const API_TOKEN = process.env.SLACK_ACCESS_TOKEN;
   const client = new WebClient(API_TOKEN);
@@ -16,3 +16,5 @@ const send = async (error, channelId) => {
     console.error(error);
   }
 };
+
+module.exports = { sendMessageToSlack };

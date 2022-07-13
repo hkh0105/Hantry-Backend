@@ -2,6 +2,7 @@ const CustomeError = require("../utils/CustomError");
 const Error = require("../model/Error");
 const Project = require("../model/Project");
 const { sendEmail } = require("../utils/email");
+const { sendMessageToSlack } = require("../utils/slack");
 const { getSourceFromSourceMap } = require("../utils/getSourceFromSourceMap");
 const {
   USER_DOES_NOT_EXIST,
@@ -13,6 +14,10 @@ const {
 async function saveNewError(error, dsn) {
   const project = await Project.findOne({ dsn: dsn });
 
+  if (!project) {
+    return null;
+  }
+
   if (
     project.alarm &&
     project.alaramSettings &&
@@ -21,8 +26,12 @@ async function saveNewError(error, dsn) {
     sendEmail(project.alaramSettings.email, error);
   }
 
-  if (!project) {
-    return null;
+  if (
+    project.alarm &&
+    project.alaramSettings &&
+    project.alaramSettings.alarmType === "Slack"
+  ) {
+    sendMessageToSlack(project.alaramSettings.email, error);
   }
 
   if (project.sourceMap) {
