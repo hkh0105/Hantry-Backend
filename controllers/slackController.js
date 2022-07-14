@@ -34,7 +34,7 @@ const resposeToSlackOauth = asyncCatcher(async (req, res, next) => {
       if (!error && response.statusCode == 200) {
         console.log(body);
         let oauthToken = JSON.parse(body).access_token;
-        res.send(oauthToken);
+        res.send("Success, Thank you for using Hantry");
       }
     },
   );
