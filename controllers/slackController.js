@@ -16,9 +16,7 @@ const resposeToSlack = (req, res, next) => {
 };
 
 const resposeToSlackOauth = (req, res, next) => {
-  const code = req.body.code;
-  console.log(req.body);
-  console.log(code);
+  const code = req.query.code;
   const slackResponse = request.post(
     "https://slack.com/api/oauth.access",
     (data = {
@@ -33,7 +31,7 @@ const resposeToSlackOauth = (req, res, next) => {
 
   console.log(response);
   console.log(accessToken);
-  res.json("auth success");
+  res.json(accessToken);
 };
 
 module.exports = { resposeToSlack, resposeToSlackOauth };
