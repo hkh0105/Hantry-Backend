@@ -21,6 +21,7 @@
     "morgan": "~1.9.1",
     "nodemailer": "^6.7.7",
     "nodemon": "^2.0.18",
+    "requests": "^0.3.0",
     "slack-node": "^0.1.8",
     "source-map": "^0.7.4",
     "uuid": "^8.3.2"
