@@ -30,14 +30,13 @@ const resposeToSlackOauth = asyncCatcher(async (req, res, next) => {
   const slackResponse = await request.post(
     "https://slack.com/api/oauth.v2.access",
     data,
+    function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        console.log(body);
+        let oauthToken = JSON.parse(body).access_token;
+      }
+    },
   );
-
-  console.log(slackResponse);
-
-  // const response = JSON.parse(slackResponse).access_token;
-
-  console.log(slackResponse);
-  res.json(slackResponse);
 });
 
 module.exports = { resposeToSlack, resposeToSlackOauth };
