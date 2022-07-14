@@ -36,8 +36,8 @@ const resposeToSlackOauth = asyncCatcher(async (req, res, next) => {
 
   // const response = JSON.parse(slackResponse).access_token;
 
-  console.log(response);
-  res.json(response);
+  console.log(slackResponse);
+  res.json(slackResponse);
 });
 
 module.exports = { resposeToSlack, resposeToSlackOauth };
