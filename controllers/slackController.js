@@ -22,8 +22,8 @@ const resposeToSlackOauth = (req, res, next) => {
   const slackResponse = request.post(
     "https://slack.com/api/oauth.access",
     (data = {
-      client_id: "아이디",
-      client_secret: "시크릿",
+      client_id: process.env.SLACK_CLIEND_ID,
+      client_secret: process.env.SLACK_CLIEND_SECRET,
       code: code,
     }),
   );
