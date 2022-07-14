@@ -16,4 +16,5 @@ const sendMessageToSlack = async (channelId, error) => {
     console.error(error);
   }
 };
+
 module.exports = { sendMessageToSlack };
