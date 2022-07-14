@@ -15,23 +15,29 @@ const resposeToSlack = (req, res, next) => {
   res.status(200).json({ challenge: challenge });
 };
 
-const resposeToSlackOauth = (req, res, next) => {
+const resposeToSlackOauth = asyncCatcher(async (req, res, next) => {
+  if (!req.query.code) return;
+
   const code = req.query.code;
-  const slackResponse = request.post(
-    "https://slack.com/api/oauth.access",
-    (data = {
+  const data = {
+    form: {
       client_id: process.env.SLACK_CLIEND_ID,
       client_secret: process.env.SLACK_CLIEND_SECRET,
       code: code,
-    }),
+    },
+  };
+
+  const slackResponse = await request.post(
+    "https://slack.com/api/oauth.v2.access",
+    data,
   );
 
-  const response = json.loads(slackResponse.text);
-  const accessToken = response["access_token"];
+  console.log(slackResponse);
+
+  const response = JSON.parse(slackResponse).access_token;
 
   console.log(response);
-  console.log(accessToken);
-  res.json(accessToken);
-};
+  res.json(response);
+});
 
 module.exports = { resposeToSlack, resposeToSlackOauth };
