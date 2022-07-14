@@ -6,7 +6,6 @@ const { verifyToken } = require("../middlewares/auth");
 const { getError } = require("../controllers/userController");
 
 router.route("/login").post(verifyGoogle, login);
-router.route("/slack").post(getError);
 router.route("/error/:error_id").get(verifyToken, getError);
 
 module.exports = router;
