@@ -148,7 +148,10 @@ const getError = asyncCatcher(async (req, res, next) => {
 
 const getProjectErrorList = asyncCatcher(async (req, res, next) => {
   const { dsn, page_number } = req.params;
-  const errorList = await getFileteredErrorList(dsn, page_number);
+  const filterType = req.query.filter;
+  const errorList = filterType
+    ? await getFileteredErrorList(dsn, page_number, filterType)
+    : await getFileteredErrorList(dsn, page_number);
 
   if (!errorList) {
     return next(new CustomeError(FOUND_NO_FIELD));

@@ -89,10 +89,19 @@ async function getErrorDetatils(errorId) {
 
   return error;
 }
-async function getFileteredErrorList(dsn, page) {
-  const project = await Error.find({ project: dsn })
-    .skip(5 * page - 5)
-    .limit(5);
+async function getFileteredErrorList(dsn, page, filterType) {
+  let project;
+
+  filterType != "undefined" && filterType
+    ? (project = await Error.find({ project: dsn })
+        .find({
+          type: { $regex: filterType },
+        })
+        .skip(5 * page - 5)
+        .limit(5))
+    : (project = await Error.find({ project: dsn })
+        .skip(5 * page - 5)
+        .limit(5));
 
   if (!project) {
     return null;
