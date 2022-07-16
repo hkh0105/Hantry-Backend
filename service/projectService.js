@@ -9,8 +9,8 @@ const {
   INVALID_EMAIL,
 } = require("../constants/errorConstants");
 
-async function saveNewProject(project) {
-  const dsnGeneratedProject = generateDsnToken(project);
+async function saveNewProject(project, userID) {
+  const dsnGeneratedProject = generateDsnToken(project, userID);
   const newProject = await Project.create(dsnGeneratedProject);
   if (!newProject) {
     return null;
@@ -59,7 +59,7 @@ async function updateUserProject(fieldName, newFieldData, dsn) {
 
 async function getUserProjectAll(_id) {
   const userProjectList = await Project.find({ owner: _id });
-
+  console.log(userProjectList);
   if (!userProjectList) {
     return null;
   }
@@ -78,8 +78,7 @@ async function getDetails(dsn) {
 }
 
 async function getAllErrors(dsn) {
-  const allErrors = await Error.find({ dsn: dsn });
-
+  const allErrors = await Error.find({ project: dsn });
   if (!allErrors) {
     return null;
   }

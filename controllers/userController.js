@@ -57,9 +57,9 @@ const updateProjectPerformance = asyncCatcher(async (req, res, next) => {
 
 const createProject = asyncCatcher(async (req, res, next) => {
   const { project } = req.body;
-  console.log(req.body);
+  const userId = req.user.user._id;
   console.log(project);
-  const newProject = await saveNewProject(project);
+  const newProject = await saveNewProject(project, userId);
 
   if (!newProject) {
     return next(new CustomeError(FOUND_NO_DATA));
@@ -119,8 +119,8 @@ const updateProjectSourceMap = asyncCatcher(async (req, res, next) => {
 });
 
 const getUserProject = asyncCatcher(async (req, res, next) => {
-  const { _id } = req.user;
-  const userProject = await getUserProjectAll(_id);
+  const userId = req.user.user._id;
+  const userProject = await getUserProjectAll(userId);
 
   if (!userProject) {
     return next(new CustomeError(FOUND_NO_FIELD));
@@ -176,6 +176,7 @@ const getProjectDetails = asyncCatcher(async (req, res, next) => {
 
 const getProjectAllError = asyncCatcher(async (req, res, next) => {
   const { dsn } = req.params;
+  console.log(dsn);
   const allErrors = await getAllErrors(dsn);
 
   if (!allErrors) {
