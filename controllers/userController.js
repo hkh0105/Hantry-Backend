@@ -10,6 +10,8 @@ const {
   getUserProjectAll,
   getDetails,
   getAllErrors,
+  updateUserProject,
+  updateSourceMap,
 } = require("../service/projectService");
 const {
   saveNewError,
@@ -25,6 +27,7 @@ const {
 } = require("../constants/errorConstants");
 
 const updateProjectError = asyncCatcher(async (req, res, next) => {
+  console.log(req.body);
   const { dsn } = req.params;
   const error = req.body;
 
@@ -87,9 +90,9 @@ const deleteProject = asyncCatcher(async (req, res, next) => {
 });
 
 const updateProject = asyncCatcher(async (req, res, next) => {
-  const { dsn } = req.params.dsn;
-  const { fieldName, newFieldData } = req.body;
-  const updatedProject = await updateUserProject(fieldName, newFieldData, dsn);
+  const dsn = req.params.dsn;
+  const { project } = req.body;
+  const updatedProject = await updateUserProject(project, dsn);
 
   if (!updatedProject) {
     return next(new CustomeError(FOUND_NO_DATA));
@@ -103,10 +106,29 @@ const updateProject = asyncCatcher(async (req, res, next) => {
 });
 
 const updateProjectSourceMap = asyncCatcher(async (req, res, next) => {
+  const dsn = req.params.dsn;
+  const { sourceMap } = req.body;
+  // console.log(sourceMap);
+  // const updatedProject = await updateSourceMap(dsn, sourceMap);
+
+  // if (!updatedProject) {
+  //   return next(new CustomeError(FOUND_NO_DATA));
+  // }
+
+  // return res.json({
+  //   ok: true,
+  //   status: 201,
+  //   updatedProject,
+  // });
+});
+
+const updateSDKSourceMap = asyncCatcher(async (req, res, next) => {
   const { dsn } = req.params.dsn;
   const { sourceMap, bundledSource } = req.body;
-  console.log(sourceMap);
-  getSource(sourceMap);
+  console.log(req);
+  console.log(req.body);
+  console.log(req.file);
+  // getSource(sourceMap);
   // const newError = await saveProjectSourceMap(sourceMap, bundledSource, dsn);
 
   // if (!newError) {

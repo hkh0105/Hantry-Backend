@@ -13,6 +13,7 @@
     "debug": "~2.6.9",
     "dotenv": "^16.0.1",
     "express": "~4.16.1",
+    "express-formidable": "^1.2.0",
     "google-auth-library": "^8.1.0",
     "hantry-js-core": "^0.1.29",
     "jsonwebtoken": "^8.5.1",

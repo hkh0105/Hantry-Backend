@@ -19,6 +19,19 @@ async function saveNewProject(project, userID) {
   return newProject;
 }
 
+async function updateSourceMap(dsn, sourceMap) {
+  const newProject = await Project.findOne({ dsn: dsn });
+
+  if (!newProject) {
+    return null;
+  }
+
+  newProject.sourceMap = sourceMap;
+  await newProject.save();
+
+  return newProject;
+}
+
 async function deleteUserProject(dsn) {
   const newProject = await Project.findOneAndRemove({ dsn: dsn });
 
@@ -42,24 +55,30 @@ async function saveProjectSourceMap(sourceMap, bundledSource, dsn) {
   return newProject;
 }
 
-async function updateUserProject(fieldName, newFieldData, dsn) {
-  const updatedProject = await Project.findOneAndUpdate(
-    { dsn: dsn },
-    {
-      [fieldName]: newFieldData,
-    },
-  );
+async function updateUserProject(project, dsn) {
+  const updatedProject = await Project.findOne({ dsn: dsn });
+  updatedProject.name = project.name;
+  updatedProject.platform = project.platform;
+  updatedProject.alarm = project.alarm;
+  if (updatedProject.alarm) {
+    updatedProject.alaramSettings.alarmType =
+      updatedProject.alaramSettings.alarmType;
+    updatedProject.alaramSettings.alarmNumber =
+      updatedProject.alaramSettings.alarmNumber;
+    updatedProject.alaramSettings.email = updatedProject.alaramSettings.email;
+  }
 
   if (!updatedProject) {
     return null;
   }
 
+  await updatedProject.save();
+  console.log(updatedProject);
   return updatedProject;
 }
 
 async function getUserProjectAll(_id) {
   const userProjectList = await Project.find({ owner: _id });
-  console.log(userProjectList);
   if (!userProjectList) {
     return null;
   }
@@ -87,6 +106,7 @@ async function getAllErrors(dsn) {
 }
 
 module.exports = {
+  updateSourceMap,
   getAllErrors,
   getDetails,
   getUserProjectAll,

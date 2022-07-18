@@ -13,7 +13,6 @@ const {
 
 async function saveNewError(error, dsn) {
   const project = await Project.findOne({ dsn: dsn });
-
   if (!project) {
     return null;
   }
@@ -26,12 +25,8 @@ async function saveNewError(error, dsn) {
     sendEmail(project.alaramSettings.email, error);
   }
 
-  if (
-    project.alarm &&
-    project.alaramSettings &&
-    project.alaramSettings.alarmType === "Slack"
-  ) {
-    sendMessageToSlack(project.alaramSettings.email, error);
+  if (project.alarm && project.alaramSettings.alarmType === "Slack") {
+    await sendMessageToSlack(project.alaramSettings.email, error);
   }
 
   if (project.sourceMap) {

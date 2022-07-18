@@ -3,9 +3,8 @@ const { parseError } = require("./parseError");
 
 async function getSourceFromSourceMap(error, sourceMap, dsn) {
   let source = error.source;
-  let location = { lineno: error.lineno, colno: error.colno };
+  let location = { lineno: error.location.lineno, colno: error.location.colno };
   const stackList = [];
-
   const generatedLocation = await getSource(
     sourceMap,
     location.lineno,
@@ -50,6 +49,7 @@ async function getSourceFromSourceMap(error, sourceMap, dsn) {
 
   return newError;
 }
+
 async function getSource(map, line, column) {
   const consumer = await new sourceMap.SourceMapConsumer(map);
   const location = consumer.originalPositionFor({
@@ -59,14 +59,6 @@ async function getSource(map, line, column) {
 
   consumer.destroy();
   return location;
-}
-
-function playground(map, line, column) {
-  if (line < 0 && column < 0) return { line: 0, column: 0, source: null };
-  const location = {
-    line,
-    column,
-  };
 }
 
 module.exports = { getSourceFromSourceMap };
