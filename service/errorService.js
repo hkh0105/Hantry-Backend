@@ -29,7 +29,7 @@ async function saveNewError(error, dsn) {
     await sendMessageToSlack(project.alaramSettings.email, error);
   }
 
-  if (project.sourceMap) {
+  if (project.sourceMap && error.user) {
     const generatedError = getSourceFromSourceMap(
       error,
       project.sourceMap,
@@ -84,17 +84,20 @@ async function getErrorDetatils(errorId) {
 
   return error;
 }
-async function getFileteredErrorList(dsn, page, filterType) {
+async function getFileteredErrorList(dsn, page, filterType, orderType) {
   let project;
+  let newOrderType = orderType === "ascent" ? 1 : -1;
 
-  filterType != "undefined" && filterType
+  filterType != null
     ? (project = await Error.find({ project: dsn })
         .find({
           type: { $regex: filterType },
         })
+        .sort({ createdAt: newOrderType })
         .skip(5 * page - 5)
         .limit(5))
     : (project = await Error.find({ project: dsn })
+        .sort({ field: newOrderType })
         .skip(5 * page - 5)
         .limit(5));
 

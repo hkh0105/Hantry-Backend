@@ -27,7 +27,6 @@ const {
 } = require("../constants/errorConstants");
 
 const updateProjectError = asyncCatcher(async (req, res, next) => {
-  console.log(req.body);
   const { dsn } = req.params;
   const error = req.body;
 
@@ -171,9 +170,11 @@ const getError = asyncCatcher(async (req, res, next) => {
 const getProjectErrorList = asyncCatcher(async (req, res, next) => {
   const { dsn, page_number } = req.params;
   const filterType = req.query.filter;
+  const orderType = req.query.order;
+
   const errorList = filterType
-    ? await getFileteredErrorList(dsn, page_number, filterType)
-    : await getFileteredErrorList(dsn, page_number);
+    ? await getFileteredErrorList(dsn, page_number, filterType, orderType)
+    : await getFileteredErrorList(dsn, page_number, filterType, orderType);
 
   if (!errorList) {
     return next(new CustomeError(FOUND_NO_FIELD));
