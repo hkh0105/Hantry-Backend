@@ -11,9 +11,6 @@ const slackUserSchema = new mongoose.Schema({
   token: {
     type: String,
   },
-  botToken: {
-    type: String,
-  },
   channelId: {
     type: String,
   },

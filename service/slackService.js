@@ -1,11 +1,10 @@
 const SlackUser = require("../model/SlackUser");
 
-const saveSlackWorkSpace = async (accessToken, workspace, botToken) => {
+const saveSlackWorkSpace = async (accessToken, workspace) => {
   console.log(accessToken, workspace, botToken);
   const teamModel = {
     userId: workspace,
     token: accessToken,
-    botToken: botToken,
   };
 
   const newTeam = await SlackUser.create(newTeam);
