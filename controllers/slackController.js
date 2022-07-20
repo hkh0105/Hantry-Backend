@@ -47,7 +47,6 @@ const resposeToSlackOauth = asyncCatcher(async (req, res, next) => {
 });
 
 const resposeToSlackHelpOrder = asyncCatcher(async (req, res, next) => {
-  console.log(req.body);
   const channelId = req.body.channel_id;
   const teamId = req.body.team_id;
   const responseUrl = req.body.response_url;

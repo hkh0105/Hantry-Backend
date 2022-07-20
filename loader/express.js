@@ -6,10 +6,11 @@ const routerLoader = require("./router");
 const errorHandler = require("../middlewares/errorHandler");
 const cors = require("cors");
 const { connectDB } = require("../config/db");
+// const { init } = require("hantry-js-node");
 
 async function expressLoader({ app }) {
   connectDB();
-
+  // init("c8c6aa05-4cb7-4ac3-aafb-b5687a5ab078", {});
   app.use(
     cors({
       origin: "*",

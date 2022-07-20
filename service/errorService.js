@@ -18,17 +18,13 @@ async function saveNewError(error, dsn) {
     return null;
   }
 
-  if (
-    project.alarm &&
-    project.alaramSettings &&
-    project.alaramSettings.alarmType === "Email"
-  ) {
+  if (project.alarm && project.alaramSettings.alarmType === "Email") {
     sendEmail(project.alaramSettings.email, error);
   }
 
   if (project.alarm && project.alaramSettings.alarmType === "Slack") {
     const slackUser = await SlackUser.find({ dsn: dsn });
-    await sendMessageToSlack(slackUser.channelId, error, token);
+    await sendMessageToSlack(slackUser[0].channelId, error, slackUser[0].token);
   }
 
   if (project.sourceMap && error.user) {
