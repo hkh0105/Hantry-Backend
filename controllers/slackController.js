@@ -33,13 +33,13 @@ const resposeToSlackOauth = asyncCatcher(async (req, res, next) => {
   const slackResponse = await request.post(
     "https://slack.com/api/oauth.v2.access",
     data,
-    async function (error, response, body) {
+    function (error, response, body) {
       if (!error && response.statusCode == 200) {
         const oauthToken = JSON.parse(body).access_token;
         const teamId = JSON.parse(body).team_id;
         const botToken = JSON.parse(body).bot.bot_access_token;
 
-        await saveSlackWorkSpace(oauthToken, teamId, botToken);
+        saveSlackWorkSpace(oauthToken, teamId, botToken);
 
         res.send("Success, Thank you for using Hantry");
       }
