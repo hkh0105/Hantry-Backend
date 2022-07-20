@@ -20,7 +20,7 @@ const resposeToSlack = (req, res, next) => {
 
 const resposeToSlackOauth = asyncCatcher(async (req, res, next) => {
   if (!req.query.code) return;
-
+  console.log(req);
   const code = req.query.code;
   const data = {
     form: {
@@ -37,7 +37,7 @@ const resposeToSlackOauth = asyncCatcher(async (req, res, next) => {
       if (!error && response.statusCode == 200) {
         const oauthToken = JSON.parse(body).access_token;
         const teamId = JSON.parse(body).team_id;
-
+        console.log(body);
         saveSlackWorkSpace(oauthToken, teamId);
 
         res.send("Success, Thank you for using Hantry");
