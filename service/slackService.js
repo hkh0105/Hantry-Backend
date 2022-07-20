@@ -7,7 +7,7 @@ const saveSlackWorkSpace = async (accessToken, workspace) => {
     token: accessToken,
   };
 
-  const newTeam = await SlackUser.create(newTeam);
+  const newTeam = await SlackUser.create(teamModel);
   await newTeam.save();
 
   return newTeam;
