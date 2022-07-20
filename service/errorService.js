@@ -1,6 +1,7 @@
 const CustomeError = require("../utils/CustomError");
 const Error = require("../model/Error");
 const Project = require("../model/Project");
+const SlackUser = require("../model/SlackUser");
 const { sendEmail } = require("../utils/email");
 const { sendMessageToSlack } = require("../utils/slack");
 const { getSourceFromSourceMap } = require("../utils/getSourceFromSourceMap");
@@ -26,7 +27,8 @@ async function saveNewError(error, dsn) {
   }
 
   if (project.alarm && project.alaramSettings.alarmType === "Slack") {
-    await sendMessageToSlack(project.alaramSettings.email, error);
+    const slackUser = await SlackUser.find({ dsn: dsn });
+    await sendMessageToSlack(slackUser.channelId, error, token);
   }
 
   if (project.sourceMap && error.user) {
