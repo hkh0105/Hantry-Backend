@@ -8,6 +8,7 @@ const saveSlackWorkSpace = async (accessToken, workspace) => {
   };
 
   const newTeam = await SlackUser.create(newTeam);
+  await newTeam.save();
 
   return newTeam;
 };
