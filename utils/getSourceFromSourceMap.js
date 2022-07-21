@@ -29,7 +29,8 @@ async function getSourceFromSourceMap(error, sourceMap, dsn) {
         error.stack[i].lineno,
         error.stack[i].colno,
       );
-      const newStack = {
+
+      stackList.push({
         function:
           error.stack[i].function +
           generatedLocation.source +
@@ -37,10 +38,7 @@ async function getSourceFromSourceMap(error, sourceMap, dsn) {
           generatedLocation.name,
         lineno: generatedLocation.line,
         colno: generatedLocation.column,
-      };
-
-      stackList.push(newStack);
-      console.log(newStack);
+      });
     }
     console.log(stackList);
     const newError = {
