@@ -107,18 +107,18 @@ const updateProject = asyncCatcher(async (req, res, next) => {
 const updateProjectSourceMap = asyncCatcher(async (req, res, next) => {
   const dsn = req.params.dsn;
   const { sourceMap } = req.body;
-  // console.log(sourceMap);
-  // const updatedProject = await updateSourceMap(dsn, sourceMap);
 
-  // if (!updatedProject) {
-  //   return next(new CustomeError(FOUND_NO_DATA));
-  // }
+  const updatedProject = await updateSourceMap(dsn, sourceMap);
 
-  // return res.json({
-  //   ok: true,
-  //   status: 201,
-  //   updatedProject,
-  // });
+  if (!updatedProject) {
+    return next(new CustomeError(FOUND_NO_DATA));
+  }
+
+  return res.json({
+    ok: true,
+    status: 201,
+    updatedProject,
+  });
 });
 
 const updateSDKSourceMap = asyncCatcher(async (req, res, next) => {
