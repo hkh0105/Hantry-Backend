@@ -40,8 +40,9 @@ async function getSourceFromSourceMap(error, sourceMap, dsn) {
       };
 
       stackList.push(newStack);
+      console.log(newStack);
     }
-
+    console.log(stackList);
     const newError = {
       type: error.type || "React",
       message: error.message || "",
