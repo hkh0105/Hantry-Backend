@@ -28,15 +28,19 @@ async function saveNewError(error, dsn) {
   }
 
   if (project.sourceMap && error.user) {
-    const generatedError = getSourceFromSourceMap(
-      error,
-      project.sourceMap,
-      dsn,
-    );
+    try {
+      const generatedError = await getSourceFromSourceMap(
+        error,
+        project.sourceMap,
+        dsn,
+      );
 
-    const newError = new Error(generatedError);
-    await newError.save();
-    return newError;
+      const newError = new Error(generatedError);
+      await newError.save();
+      return newError;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const newError = new Error({

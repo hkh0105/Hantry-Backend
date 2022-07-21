@@ -1,8 +1,10 @@
 const sourceMap = require("@cspotcode/source-map");
+const Project = require("../model/Project");
 const { parseError } = require("./parseError");
 
 async function getSourceFromSourceMap(error, sourceMap, dsn) {
   try {
+    console.log(sourceMap);
     let source = error.source;
     let location = {
       lineno: error.location.lineno,
@@ -50,11 +52,11 @@ async function getSourceFromSourceMap(error, sourceMap, dsn) {
       createdAt: error.createdAt || Date.now(),
       project: dsn,
     };
-  } catch (err) {
-    console.log(err);
-  }
 
-  return newError;
+    return newError;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 async function getSource(map, line, column) {
@@ -64,6 +66,7 @@ async function getSource(map, line, column) {
     column: column,
   });
 
+  console.log(location);
   consumer.destroy();
   return location;
 }
