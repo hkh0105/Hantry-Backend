@@ -30,11 +30,13 @@ async function getSourceFromSourceMap(error, sourceMap, dsn) {
         error.stack[i].colno,
       );
       const newStack = {
-        function: error.stack[i].function + generatedLocation.source,
-        location: {
-          lineno: generatedLocation.line,
-          colno: generatedLocation.column,
-        },
+        function:
+          error.stack[i].function +
+          generatedLocation.source +
+          " " +
+          generatedLocation.name,
+        lineno: generatedLocation.line,
+        colno: generatedLocation.column,
       };
 
       stackList.push(newStack);
@@ -43,7 +45,7 @@ async function getSourceFromSourceMap(error, sourceMap, dsn) {
     const newError = {
       type: error.type || "React",
       message: error.message || "",
-      source: source || "",
+      source: location.source || "",
       location: location || { colno: 0, lineno: 0 },
       stack: stackList,
       user: error.user || {},
