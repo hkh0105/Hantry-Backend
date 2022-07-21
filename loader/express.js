@@ -10,7 +10,6 @@ const { connectDB } = require("../config/db");
 
 async function expressLoader({ app }) {
   connectDB();
-  // init("c8c6aa05-4cb7-4ac3-aafb-b5687a5ab078", {});
   app.use(
     cors({
       origin: "*",
