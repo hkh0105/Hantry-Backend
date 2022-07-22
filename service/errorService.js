@@ -113,7 +113,7 @@ async function getErrorDetatils(errorId) {
 async function getFileteredErrorList(dsn, page, filterType, orderType) {
   let project;
   let newOrderType = orderType === "ascent" ? 1 : -1;
-
+  console.log(dsn, filterType);
   filterType != null
     ? (project = await Error.find({ project: dsn })
         .find({
