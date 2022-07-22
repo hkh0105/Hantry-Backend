@@ -12,6 +12,7 @@ const {
   getAllErrors,
   updateUserProject,
   updateSourceMap,
+  deleteSourceMap,
 } = require("../service/projectService");
 const {
   saveNewError,
@@ -215,7 +216,23 @@ const getProjectAllError = asyncCatcher(async (req, res, next) => {
   });
 });
 
+const deleteProjectSourceMap = asyncCatcher(async (req, res, next) => {
+  const { dsn } = req.params;
+
+  const deletedProject = await deleteSourceMap(dsn);
+
+  if (!deletedProject) {
+    return next(new CustomeError(FOUND_NO_FIELD));
+  }
+
+  return res.json({
+    ok: true,
+    deletedProject,
+  });
+});
+
 module.exports = {
+  deleteProjectSourceMap,
   getProjectAllError,
   getProjectDetails,
   getProjectErrorList,

@@ -12,6 +12,7 @@ const {
   getProjectErrorList,
   getProjectDetails,
   getProjectAllError,
+  deleteProjectSourceMap,
 } = require("../controllers/userController");
 
 router.route("/project/:dsn/error").get(verifyToken, getProjectAllError);
@@ -22,6 +23,9 @@ router.route("/project/:dsn/sdk/sourceMap").post(updateProjectSourceMap);
 router.route("/project").post(verifyToken, createProject);
 router.route("/project").get(verifyToken, getUserProject);
 router.route("/project/:dsn").delete(verifyToken, deleteProject);
+router
+  .route("/project/:dsn/sourceMap")
+  .delete(verifyToken, deleteProjectSourceMap);
 router.route("/project/:dsn").patch(verifyToken, updateProject);
 router.route("/project/:dsn").get(verifyToken, getProjectDetails);
 router

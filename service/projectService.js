@@ -105,6 +105,14 @@ async function getAllErrors(dsn) {
   return allErrors;
 }
 
+async function deleteSourceMap(dsn) {
+  const project = await Project.findOne({ dsn: dsn });
+  project.sourceMap = null;
+  await project.save();
+
+  return project;
+}
+
 module.exports = {
   updateSourceMap,
   getAllErrors,
@@ -114,4 +122,5 @@ module.exports = {
   deleteUserProject,
   saveProjectSourceMap,
   updateUserProject,
+  deleteSourceMap,
 };
