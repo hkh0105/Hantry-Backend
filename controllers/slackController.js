@@ -46,7 +46,7 @@ const resposeToSlackOauth = asyncCatcher(async (req, res, next) => {
   );
 });
 
-const resposeToSlackHelpOrder = asyncCatcher(async (req, res, next) => {
+const responseToSlackDsnOrder = asyncCatcher(async (req, res, next) => {
   const channelId = req.body.channel_id;
   const teamId = req.body.team_id;
   const responseUrl = req.body.response_url;
@@ -76,8 +76,30 @@ const resposeToSlackHelpOrder = asyncCatcher(async (req, res, next) => {
     : null;
 });
 
+const resposeToSlackHelpOrder = asyncCatcher(async (req, res, next) => {
+  res.status(200).json({
+    blocks: [
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: "*Orider List.*",
+        },
+      },
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: "/hantry_subscribe <your dsn>  update your dsn and Channel",
+        },
+      },
+    ],
+  });
+});
+
 module.exports = {
   resposeToSlack,
   resposeToSlackOauth,
   resposeToSlackHelpOrder,
+  responseToSlackDsnOrder,
 };
