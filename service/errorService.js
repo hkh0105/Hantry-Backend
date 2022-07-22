@@ -19,12 +19,20 @@ async function saveNewError(error, dsn) {
   }
 
   if (project.alarm && project.alaramSettings.alarmType === "Email") {
-    sendEmail(project.alaramSettings.email, error);
+    if (project.alaramSettings.email) {
+      sendEmail(project.alaramSettings.email, error);
+    }
   }
 
   if (project.alarm && project.alaramSettings.alarmType === "Slack") {
     const slackUser = await SlackUser.find({ dsn: dsn });
-    await sendMessageToSlack(slackUser[0].channelId, error, slackUser[0].token);
+    if (slackUser && slackUser[0] && slackUser[0].channelId) {
+      await sendMessageToSlack(
+        slackUser[0].channelId,
+        error,
+        slackUser[0].token,
+      );
+    }
   }
 
   if (project.sourceMap && error.user) {
@@ -40,6 +48,22 @@ async function saveNewError(error, dsn) {
       return newError;
     } catch (error) {
       console.log(error);
+      const newError = new Error({
+        type: error.type || "React",
+        message: error.message || "",
+        source: error.source || "",
+        location: error.location || { colno: 0, lineno: 0 },
+        stack: error.stack || [],
+        user: error.user || {},
+        breadcrumbsURL: error.breadcrumbsURL || [],
+        breadcrumbsClick: error.breadcrumbsClick || [],
+        createdAt: error.createdAt || Date.now(),
+        project: dsn,
+      });
+
+      await newError.save();
+
+      return newError;
     }
   }
 
